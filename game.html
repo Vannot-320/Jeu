@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="game-page" onload="initGamePages()">
+
+  <button class="back-btn" id="backBtn">⬅️</button>
+  <button class="sound-icon">🔊</button>
+
+  <div id="gameScreen" class="game-screen">
+    <div class="score-container" style="text-align: center; margin-top: 20px;">
+      <div style="font-weight: bold; font-size: 1.2em;">
+        <span id="playerLabel">Vous</span> &nbsp;&nbsp;&nbsp;&nbsp; <span id="opponentLabel">Ordinateur</span>
+      </div>
+      <div class="scores" style="display: flex; justify-content: center; gap: 60px; font-size: 1.5em; margin-top: 10px;">
+        <p id="playerScore">0</p>
+        <p id="computerScore">0</p>
+      </div>
+    </div>
+
+    <div class="hands">
+      <img id="playerChoice" src="fist-left.png" alt="Player" class="hand" />
+      <img id="computerChoice" src="fist-right.png" alt="Computer" class="hand" />
+    </div>
+
+    <div id="roundResult" class="round-result" style="display:none;"></div>
+
+    <div class="choices">
+      <button class="choice-btn" onclick="choose('rock')" id="rockBtn">
+          <img src="pierre.png" alt="Pierre" class="mode-img"/>
+      </button>
+      <button class="choice-btn" onclick="choose('paper')" id="paperBtn">
+          <img src="feuille.png" alt="Feuille" class="mode-img"/>
+      </button>
+      <button class="choice-btn" onclick="choose('scissors')" id="scissorsBtn">
+          <img src="ciseau.png" alt="Ciseaux" class="mode-img"/>
+      </button>
+    </div>
+  </div>
+
+<div id="endScreen" style="display:none;" class="end-screen">
+  <h2 id="finalResult"></h2>
+  <div class="final-scores">
+    <p id="finalPlayerScore"></p>
+    <p id="finalComputerScore"></p>
+  </div>
+  <button class="replay-btn" onclick="replayGame()">Rejouer</button>
+  <h3>Tableau des scores</h3>
+  <ul id="scoreboardList" class="scoreboard-list"></ul>
+</div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

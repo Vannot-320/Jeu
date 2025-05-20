@@ -1,0 +1,414 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: #6d1b1b;
+  background-image: url("pierre.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  height: 100vh;
+}
+
+.container,
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  position: relative;
+}
+
+.container {
+  flex-direction: column;
+}
+
+.sound-icon {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.welcome-text {
+  font-size: 5rem;
+  font-style: italic;
+  color: #d4ff00;
+  margin-bottom: 50px;
+}
+
+.play-button {
+  font-size: 5rem;
+  background-color: #d4ff00;
+  color: #1d1d1d;
+  border: none;
+  border-radius: 500%;
+  width: 150px;
+  height: 150px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.login-container {
+  background-color: rgba(255, 255, 255, 0.15);
+  padding: 30px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.login-container h2 {
+  margin-bottom: 20px;
+  color: white;
+}
+
+.login-container input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 10px;
+}
+
+.login-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #9966ff;
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.register-text {
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: white;
+}
+
+.register-text a {
+  color: #66ccff;
+  text-decoration: none;
+}
+
+.choose-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.choose-title {
+  font-size: 2.5rem;
+  color: #ffcccc;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  text-shadow: 2px 2px #000;
+  margin-bottom: 30px;
+  text-decoration: underline;
+}
+
+.choose-buttons {
+  display: flex;
+  gap: 60px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.mode-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.mode-img {
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.3s;
+}
+
+.mode-img:hover {
+  transform: scale(1.1);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-image: url("pierre.webp");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: white;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.game-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  padding-top: 60px;
+  text-align: center;
+  background: transparent;
+}
+
+.back-btn,
+.sound-icon {
+  position: absolute;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.back-btn {
+  top: 20px;
+  left: 20px;
+  cursor: pointer;
+}
+
+.sound-icon {
+  top: 20px;
+  right: 30px;
+  cursor: pointer;
+}
+
+.hands {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(3px);
+  margin-top: 80px;
+}
+
+.hand {
+  width: 200px;
+  height: auto;
+  transition: transform 0.4s ease;
+}
+
+.choices {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 30px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 15px 30px;
+  border-radius: 20px;
+  backdrop-filter: blur(4px);
+  width: 500px;
+}
+
+.choice-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.choice-btn img,
+.mode-img {
+  width: 100px;
+  height: auto;
+}
+
+.choice-btn:hover {
+  transform: scale(1.1);
+}
+
+.result-text {
+  font-size: 5rem;
+  color: red;
+  font-family: 'Impact', sans-serif;
+  text-shadow: 4px 4px 8px black;
+  margin-top: 0px;
+}
+
+@keyframes shake {
+  0%   { transform: translateY(0); }
+  25%  { transform: translateY(-15px); }
+  50%  { transform: translateY(15px); }
+  75%  { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+.shake {
+  animation: shake 0.6s ease-in-out;
+}
+
+.scores {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  gap: 100px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 15px 40px;
+  border-radius: 15px;
+  backdrop-filter: blur(6px);
+  font-size: 2rem;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: 2px 2px 5px black;
+  z-index: 1;
+}
+
+.hands {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 20px 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(3px);
+  margin-top: 160px;
+}
+
+.result-text {
+  font-size: 3rem;
+  color: #ffcc00;
+  font-family: 'Impact', sans-serif;
+  text-shadow: 3px 3px 5px black;
+  margin-top: 30px;
+}
+
+.end-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,0.8);
+  width: 100%;
+  height: 100%;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.end-screen h2 {
+  font-size: 2em;
+  margin-bottom: 10px;
+}
+
+.final-scores {
+  font-size: 1.3em;
+  margin-bottom: 20px;
+}
+
+.replay-btn {
+  font-size: 1.2em;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  border: none;
+  background-color: #ffcc00;
+  color: black;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.hidden {
+  display: none;
+}
+
+.choice-btn:active,
+.mode-button:active,
+.login-btn:active,
+.play-button:active,
+.replay-btn:active {
+  transform: scale(0.95) !important;
+}
+
+.choice-btn:hover,
+.mode-button:hover,
+.login-btn:hover,
+.play-button:hover,
+.replay-btn:hover {
+  filter: brightness(1.1);
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+.sound-icon {
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sound-icon:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.1);
+}
+
+.choice-btn.selected {
+  transform: scale(1.15);
+  filter: drop-shadow(0 0 10px gold);
+}
+
+#roundResult {
+  font-size: 2.2rem;
+  font-weight: bold;
+  color: #ffcc00;
+  text-shadow: 2px 2px 5px black;
+  margin: 20px 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+@keyframes shakeVertical {
+  0% { transform: translateY(0); }
+  25% { transform: translateY(-10px); }
+  50% { transform: translateY(0); }
+  75% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+
+.hand.animated {
+  animation: shakeVertical 0.6s ease-in-out infinite;
+}
+
+.hand.playing {
+  animation: none;
+}

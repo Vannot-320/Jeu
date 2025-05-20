@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>The Player Choose</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="choose-page" onload="initGamePages()">
+  <button class="sound-icon">🔊</button>
+
+  <h1 class="choose-title">The player choose</h1>
+  <div class="choose-buttons">
+    <button class="mode-button" onclick="playVsPC()">
+      <img src="vs1.png" alt="VS PC" class="mode-img" />
+    </button>
+    <button class="mode-button" onclick="playVsPlayer()">
+      <img src="vs.png" alt="VS Player" class="mode-img" />
+    </button>
+  </div>
+  <div id="statusMessage" style="margin-top: 20px; font-weight: bold; color: blue;"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
