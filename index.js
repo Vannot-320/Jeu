@@ -1,44 +1,54 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
-const path = require('path');
-const sqlite3 = require('sqlite3');
+const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
+const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
 
-const PORT = 3000;
-const SALT_ROUNDS = 10;
-
-const db = new sqlite3.Database('./users.db', (err) => {
-    if (err) {
-        console.error('Erreur lors de la connexion à la base de données SQLite:', err.message);
-    } else {
-        console.log('Connecté à la base de données SQLite.');
-        db.run(`CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE,
-            email TEXT UNIQUE,
-            password TEXT
-        );`, (err) => {
-            if (err) {
-                console.error('Erreur lors de la création de la table users:', err.message);
-            } else {
-                console.log('Table "users" prête.');
-            }
-        });
+const io = new Server(server, {
+    cors: {
+        origin: process.env.FRONTEND_URL,
+        methods: ["GET", "POST"],
+        credentials: true
     }
 });
+
+const PORT = process.env.PORT || 3000;
+const SALT_ROUNDS = 10;
+
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: {
+        rejectUnauthorized: false
+    }
+});
+
+pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username TEXT UNIQUE NOT NULL,
+        email TEXT UNIQUE NOT NULL,
+        password TEXT NOTCTED
+    );
+`)
+.then(() => console.log('Table "users" prête (PostgreSQL).'))
+.catch(err => console.error('Erreur lors de la création de la table users (PostgreSQL):', err.message));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true
+}));
+
 app.use(session(
     {
-        secret: 'votre_secret_tres_tres_secure_pour_la_session_ici',
+        secret: process.env.SESSION_SECRET || 'votre_secret_secure_par_defaut_si_non_set',
         resave: false,
         saveUninitialized: false,
         cookie: {
@@ -53,11 +63,9 @@ function isAuthenticated(req, res, next) {
     if (req.session.userId) {
         next();
     } else {
-        res.redirect('/login.html');
+        res.status(401).json({ message: 'Non authentifié. Veuillez vous connecter.' });
     }
 }
-
-app.use(express.static(__dirname));
 
 app.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
@@ -69,21 +77,21 @@ app.post('/register', async (req, res) => {
     try {
         const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
-        db.run('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, hashedPassword], function(err) {
-            if (err) {
-                if (err.message.includes('UNIQUE constraint failed: users.username')) {
-                    return res.status(409).json({ message: 'Le nom d\'utilisateur est déjà utilisé.' });
-                }
-                if (err.message.includes('UNIQUE constraint failed: users.email')) {
-                    return res.status(409).json({ message: 'L\'adresse e-mail est déjà utilisée.' });
-                }
-                console.error('Erreur lors de l\'insertion de l\'utilisateur:', err.message);
-                return res.status(500).json({ message: 'Erreur lors de l\'insertion de l\'utilisateur.' });
-            }
-            res.status(201).json({ message: 'Inscription réussie!' });
-        });
+        const query = 'INSERT INTO users (username, email, password) VALUES ($1, $2, $3)';
+        const values = [username, email, hashedPassword];
+
+        await pool.query(query, values);
+        res.status(201).json({ message: 'Inscription réussie!' });
     } catch (error) {
-        console.error('Erreur lors du hachage du mot de passe:', error);
+        if (error.code === '23505') {
+            if (error.detail.includes('username')) {
+                return res.status(409).json({ message: 'Le nom d\'utilisateur est déjà utilisé.' });
+            }
+            if (error.detail.includes('email')) {
+                return res.status(409).json({ message: 'L\'adresse e-mail est déjà utilisée.' });
+            }
+        }
+        console.error('Erreur lors de l\'insertion de l\'utilisateur (PostgreSQL):', error.message);
         res.status(500).json({ message: 'Erreur serveur.' });
     }
 });
@@ -95,11 +103,11 @@ app.post('/login', async (req, res) => {
         return res.status(400).json({ message: 'Veuillez fournir un nom d\'utilisateur et un mot de passe.' });
     }
 
-    db.get('SELECT * FROM users WHERE username = ?', [username], async (err, user) => {
-        if (err) {
-            console.error('Erreur lors de la récupération de l\'utilisateur:', err.message);
-            return res.status(500).json({ message: 'Erreur serveur.' });
-        }
+    try {
+        const query = 'SELECT * FROM users WHERE username = $1';
+        const result = await pool.query(query, [username]);
+        const user = result.rows[0];
+
         if (!user) {
             return res.status(401).json({ message: 'Nom d\'utilisateur ou mot de passe incorrect.' });
         }
@@ -112,19 +120,14 @@ app.post('/login', async (req, res) => {
         req.session.userId = user.id;
         req.session.username = user.username;
         res.status(200).json({ message: 'Connexion réussie!', username: user.username });
-    });
+    } catch (error) {
+        console.error('Erreur lors de la récupération de l\'utilisateur ou du hachage:', error);
+        res.status(500).json({ message: 'Erreur serveur.' });
+    }
 });
 
-app.get('/playerChoose.html', isAuthenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, 'playerChoose.html'));
-});
-
-app.get('/game.html', isAuthenticated, (req, res) => {
-    res.sendFile(path.join(__dirname, 'game.html'));
-});
-
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'welcome.html'));
+app.use((req, res) => {
+    res.status(404).json({ message: "Endpoint non trouvé." });
 });
 
 let waitingPlayer = null;
@@ -264,4 +267,8 @@ io.on('connection', (socket) => {
 
 server.listen(PORT, () => {
     console.log(`Serveur démarré sur http://localhost:${PORT}`);
+    if (process.env.NODE_ENV === 'production') {
+        console.log('Ce serveur est en mode production sur Render.com.');
+        console.log(`Accès via : https://votre-nom-de-service.onrender.com (remplacez 'votre-nom-de-service')`);
+    }
 });
