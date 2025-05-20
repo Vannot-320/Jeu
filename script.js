@@ -15,6 +15,10 @@ let opponentChoice = null;
 let isPlayerTurn = false;
 let isMultiplayerGameActive = false;
 
+// --- URL de votre backend Render.com ---
+// REMPLACEZ 'https://votre-nom-de-service.onrender.com' par l'URL réelle de votre service Render
+const RENDER_BACKEND_URL = 'https://votre-nom-de-service.onrender.com';
+
 function goToLogin() {
   playSound(clickSound);
   window.location.href = "login.html";
@@ -37,12 +41,13 @@ async function register() {
     playSound(clickSound);
 
     try {
-        const response = await fetch('/register', {
+        const response = await fetch(`${RENDER_BACKEND_URL}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, email, password })
+            body: JSON.stringify({ username, email, password }),
+            credentials: 'include'
         });
 
         const data = await response.json();
@@ -62,12 +67,13 @@ async function login() {
     playSound(clickSound);
 
     try {
-        const response = await fetch('/login', {
+        const response = await fetch(`${RENDER_BACKEND_URL}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username, password }),
+            credentials: 'include'
         });
 
         const data = await response.json();
@@ -113,7 +119,10 @@ function initSocket() {
   if (socket) {
     socket.disconnect();
   }
-  socket = io();
+  // --- Connexion Socket.IO à l'URL de Render ---
+  socket = io(RENDER_BACKEND_URL, {
+    withCredentials: true
+  });
 
   socket.on('waitingForOpponent', () => {
     const statusMessage = document.getElementById("statusMessage");
